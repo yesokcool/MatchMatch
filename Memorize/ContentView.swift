@@ -20,9 +20,9 @@ struct ContentView: View {
     @State var emojiCount = Int.random(in: 4...8)
     @State var theme = 1
     
-    // Changes the theme ID (1, 2, 3) to the given theme.
+    // Returns the theme ID (1, 2, 3) to the given theme's emoji array.
     // If the given theme ID is invalid, the theme defaults to Food.
-    func changeTheme(_ theme: Int) -> [String] {
+    func getTheme(_ theme: Int) -> [String] {
         var emojis: [String]
         switch theme {
         case 1:
@@ -39,12 +39,12 @@ struct ContentView: View {
     
     func gridSize(cardCount: Int) -> CGFloat {
         if (emojiCount < 5) {
-            return 65
+            return CGFloat(300/emojiCount)
         }
-        else if (emojiCount > 8) {
-            return CGFloat(550/emojiCount)
+        else if (emojiCount > 16) {
+            return CGFloat(1000/emojiCount)
         }
-        return 65
+        return CGFloat(65)
     }
     
     var body: some View {
@@ -54,8 +54,8 @@ struct ContentView: View {
                     .font(.largeTitle)
                     .fontWeight(.light)
                 // LazyVGrid that makes the cards as big as possible without having to scroll.
-                LazyVGrid(columns: [GridItem(.adaptive(minimum: CGFloat(400/(emojiCount))))]) {
-                    ForEach(changeTheme(theme).shuffled()[0..<emojiCount], id: \.self) { emoji in
+                LazyVGrid(columns: [GridItem(.adaptive(minimum: gridSize(cardCount: emojiCount)))]) {
+                    ForEach(getTheme(theme).shuffled()[0..<emojiCount], id: \.self) { emoji in
                         CardView(content: emoji)
                             .aspectRatio(2/3, contentMode: .fit)
                     }
@@ -93,7 +93,7 @@ struct ContentView: View {
     }
     var add: some View {
         Button {
-            if emojiCount < foodEmojis.count {
+            if emojiCount < getTheme(theme).count {
                 emojiCount += 1
             }
         } label: {
