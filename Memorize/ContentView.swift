@@ -42,7 +42,7 @@ struct ContentView: View {
             return 65
         }
         else if (emojiCount > 8) {
-            return CGFloat(500/emojiCount)
+            return CGFloat(550/emojiCount)
         }
         return 65
     }
