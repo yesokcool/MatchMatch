@@ -2,7 +2,7 @@
 //  ContentView.swift
 //  Memorize
 //
-//  Created by Matteo Galli on 3/10/22.
+//  Created on 3/10/22.
 //
 
 import SwiftUI
@@ -64,7 +64,6 @@ struct ContentView: View {
             .foregroundColor(.orange)
             Spacer()
             HStack(alignment: .top) {
-                remove
                 Spacer()
                 foodButton
                 Spacer()
@@ -72,7 +71,6 @@ struct ContentView: View {
                 Spacer()
                 peopleName
                 Spacer()
-                add
             }
             .font(.largeTitle)
             .padding(.horizontal)
@@ -80,27 +78,6 @@ struct ContentView: View {
             
         }
         .padding(.horizontal)
-    }
-    
-    var remove: some View {
-        Button {
-            if emojiCount > 1 {
-                emojiCount -= 1
-            }
-        } label: {
-            Image (systemName: "minus.circle")
-        }
-    }
-    var add: some View {
-        Button {
-            if emojiCount < getTheme(theme).count {
-                emojiCount += 1
-            }
-        } label: {
-            VStack {
-                Image (systemName: "plus.circle")
-            }
-        }
     }
     var foodButton: some View {
         Button {
@@ -167,7 +144,7 @@ struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView()
             .preferredColorScheme(.light)
-.previewInterfaceOrientation(.portrait)
+            .previewInterfaceOrientation(.portraitUpsideDown)
         ContentView()
             .preferredColorScheme(.dark)
         ContentView().previewDevice(PreviewDevice(rawValue: "iPhone 13 Pro Max"))
