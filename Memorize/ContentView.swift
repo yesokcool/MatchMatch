@@ -8,21 +8,11 @@
 import SwiftUI
 
 struct ContentView: View {
-    var foodEmojis = ["🍎", "🍊", "🍐", "🍋", "🍓", "🍉",
-                  "🥝", "🥐", "🍇", "🍑", "🥕", "🍒",
-                  "🍆", "🍅", "🥑", "🥦", "🥬", "🥒",
-                  "🌶", "🫑", "🌽", "🧄", "🫒", "🧅",
-                  "🥔", "🍠", "🥯", "🍞", "🥖", "🥨"]
-    var peopleEmojis = ["😃", "🥹", "🤣", "😂", "😜", "🥸",
-                  "😎", "🤩"]
-    var animalEmojis = ["🐷", "🙈", "🦄", "🐶", "🐻", "🐙",
-                  "🐕", "🦜", "🐿"]
-    @State var emojiCount = Int.random(in: 4...8)
-    @State var theme = 1
+    @ObservedObject var viewModel: EmojiMemoryGame
     
     // Returns the theme ID (1, 2, 3) to the given theme's emoji array.
     // If the given theme ID is invalid, the theme defaults to Food.
-    func getTheme(_ theme: Int) -> [String] {
+    /*func getTheme(_ theme: Int) -> [String] {
         var emojis: [String]
         switch theme {
         case 1:
@@ -35,9 +25,9 @@ struct ContentView: View {
             emojis = foodEmojis
         }
         return emojis
-    }
+    }*/
     
-    func gridSize(cardCount: Int) -> CGFloat {
+    /*func gridSize(cardCount: Int) -> CGFloat {
         if (emojiCount < 5) {
             return CGFloat(300/emojiCount)
         }
@@ -45,41 +35,48 @@ struct ContentView: View {
             return CGFloat(1000/emojiCount)
         }
         return CGFloat(65)
-    }
+    }*/
     
     var body: some View {
-        VStack {
+        //VStack {
             ScrollView {
                 Text("Memorize!")
                     .font(.largeTitle)
                     .fontWeight(.light)
                 // LazyVGrid that makes the cards as big as possible without having to scroll.
-                LazyVGrid(columns: [GridItem(.adaptive(minimum: gridSize(cardCount: emojiCount)))]) {
-                    ForEach(getTheme(theme).shuffled()[0..<emojiCount], id: \.self) { emoji in
-                        CardView(content: emoji)
+                //LazyVGrid(columns: [GridItem(.adaptive(minimum: gridSize(cardCount: emojiCount)))]) {
+                LazyVGrid(columns: [GridItem(.adaptive(minimum: 65))]) {
+                    //ForEach(getTheme(viewModel.cards) { card in
+                    ForEach(viewModel.cards) { card in
+                        CardView(card: card)
                             .aspectRatio(2/3, contentMode: .fit)
+                            .onTapGesture {
+                                viewModel.choose(card)
+                            }
                     }
                 }
-            }
+           // }
             .foregroundColor(.orange)
+                            }
+                            /*
             Spacer()
             HStack(alignment: .top) {
                 Spacer()
-                foodButton
+                //foodButton
                 Spacer()
-                animalButton
+                //animalButton
                 Spacer()
-                peopleName
+                //peopleName
                 Spacer()
             }
             .font(.largeTitle)
             .padding(.horizontal)
             .foregroundColor(.blue)
             
-        }
+        }*/
         .padding(.horizontal)
     }
-    var foodButton: some View {
+    /*var foodButton: some View {
         Button {
             emojiCount = Int.random(in: 4...8)
             theme = 1
@@ -114,27 +111,25 @@ struct ContentView: View {
                     .font(.caption)
             }
         }
-    }
+    }*/
 }
 
 struct CardView: View {
-    var content: String
-    @State var isFaceUp: Bool = true
-      
+    let card: MemoryGame<String>.Card
+    
     var body: some View {
         ZStack {
             let shape = RoundedRectangle(cornerRadius: 20)
-            if isFaceUp {
+            if card.isFaceUp {
                 shape.fill().foregroundColor(.white)
                 shape.strokeBorder(lineWidth: 3)
-                Text(content).font(.largeTitle)
+                Text(card.content).font(.largeTitle)
+            } else if card.isMatched {
+                shape.opacity(0)
             }
             else {
                 shape.fill()
             }
-        }
-        .onTapGesture {
-            isFaceUp = !isFaceUp
         }
     }
 }
@@ -142,11 +137,12 @@ struct CardView: View {
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView()
+        let game = EmojiMemoryGame()
+        ContentView(viewModel: game)
             .preferredColorScheme(.light)
             .previewInterfaceOrientation(.portraitUpsideDown)
-        ContentView()
+        ContentView(viewModel: game)
             .preferredColorScheme(.dark)
-        ContentView().previewDevice(PreviewDevice(rawValue: "iPhone 13 Pro Max"))
+        ContentView(viewModel: game).previewDevice(PreviewDevice(rawValue: "iPhone 13 Pro Max"))
     }
 }
