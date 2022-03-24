@@ -21,23 +21,22 @@ struct MatchGame<CardContent> where CardContent: Equatable {
                     cards[chosenIndex].isMatched = true
                     cards[potentialMatchIndex].isMatched = true
                     score += 2
-                }
-                if (cards[chosenIndex].hasBeenSeen == true) {
-                    score -= 1
-                }
-                else {
-                    cards[chosenIndex].hasBeenSeen = true
-                }
-                
-                if (cards[potentialMatchIndex].hasBeenSeen == true) {
-                    score -= 1
-                }
-                else {
-                    cards[potentialMatchIndex].hasBeenSeen = true
+                } else {
+                    if (cards[chosenIndex].hasBeenSeen == true) {
+                        score -= 1
+                    }
+                    else {
+                        cards[chosenIndex].hasBeenSeen = true
+                    }
+                    
+                    if (cards[potentialMatchIndex].hasBeenSeen == true) {
+                        score -= 1
+                    }
+                    else {
+                        cards[potentialMatchIndex].hasBeenSeen = true
+                    }
                 }
 
-                cards[chosenIndex].hasBeenSeen = true
-                cards[potentialMatchIndex].hasBeenSeen = true
                 indexOfTheOneAndOnlyFaceUpCard = nil
             } else {
                 for index in cards.indices {

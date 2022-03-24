@@ -152,7 +152,7 @@ struct ContentView_Previews: PreviewProvider {
             themeColor: "Yellow"))
         ContentView(viewModel: game)
             .preferredColorScheme(.light)
-            .previewInterfaceOrientation(.portraitUpsideDown)
+            .previewInterfaceOrientation(.portrait)
         ContentView(viewModel: game)
             .preferredColorScheme(.dark)
         ContentView(viewModel: game).previewDevice(PreviewDevice(rawValue: "iPhone 13 Pro Max"))
