@@ -1,14 +1,13 @@
-//
-//  MemoryGame.swift
-//  Memorize
+
 //
 //  Created on 3/22/22.
 //
 
 import Foundation
 
-struct MemoryGame<CardContent> where CardContent: Equatable {
+struct MatchGame<CardContent> where CardContent: Equatable {
     private(set) var cards: Array<Card>
+    private(set) var score: Int
     
     private var indexOfTheOneAndOnlyFaceUpCard: Int?
     
@@ -21,7 +20,24 @@ struct MemoryGame<CardContent> where CardContent: Equatable {
                 {
                     cards[chosenIndex].isMatched = true
                     cards[potentialMatchIndex].isMatched = true
+                    score += 2
                 }
+                if (cards[chosenIndex].hasBeenSeen == true) {
+                    score -= 1
+                }
+                else {
+                    cards[chosenIndex].hasBeenSeen = true
+                }
+                
+                if (cards[potentialMatchIndex].hasBeenSeen == true) {
+                    score -= 1
+                }
+                else {
+                    cards[potentialMatchIndex].hasBeenSeen = true
+                }
+
+                cards[chosenIndex].hasBeenSeen = true
+                cards[potentialMatchIndex].hasBeenSeen = true
                 indexOfTheOneAndOnlyFaceUpCard = nil
             } else {
                 for index in cards.indices {
@@ -39,15 +55,21 @@ struct MemoryGame<CardContent> where CardContent: Equatable {
         cards = Array<Card>()
         // add numberofpairsofcards x 2 to cards array
         for pairIndex in 0..<numberOfPairsOfCards {
-            let content = createCardContent(pairIndex)
+            var content = createCardContent(pairIndex)
+            while (cards.contains(where: { card in card.content == content})) {
+                content = createCardContent(pairIndex)
+            }
             cards.append(Card(content: content, id: pairIndex*2))
             cards.append(Card(content: content, id: pairIndex*2+1))
         }
+        cards = cards.shuffled()
+        score = 0
     }
     
     struct Card: Identifiable {
         var isFaceUp: Bool = false
         var isMatched: Bool = false
+        var hasBeenSeen: Bool = false
         var content: CardContent
         var id: Int
     }

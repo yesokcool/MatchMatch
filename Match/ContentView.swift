@@ -1,6 +1,4 @@
-//
-//  ContentView.swift
-//  Memorize
+
 //
 //  Created on 3/10/22.
 //
@@ -8,7 +6,7 @@
 import SwiftUI
 
 struct ContentView: View {
-    @ObservedObject var viewModel: EmojiMemoryGame
+    @ObservedObject var viewModel: SymbolMatchGame
     
     // Returns the theme ID (1, 2, 3) to the given theme's emoji array.
     // If the given theme ID is invalid, the theme defaults to Food.
@@ -38,12 +36,17 @@ struct ContentView: View {
     }*/
     
     var body: some View {
-        //VStack {
+        VStack {
             ScrollView {
-                Text("Memorize!")
+                /*Text("Memorize!")
+                    .font(.title)
+                    .fontWeight(.light)*/
+                Text(viewModel.getThemeName())
                     .font(.largeTitle)
-                    .fontWeight(.light)
-                // LazyVGrid that makes the cards as big as possible without having to scroll.
+                    .fontWeight(.bold)
+                    .foregroundColor(viewModel.getThemeColor())
+                Text("Score: \(viewModel.getScore())")
+                //LazyVGrid that makes the cards as big as possible without having to scroll.
                 //LazyVGrid(columns: [GridItem(.adaptive(minimum: gridSize(cardCount: emojiCount)))]) {
                 LazyVGrid(columns: [GridItem(.adaptive(minimum: 65))]) {
                     //ForEach(getTheme(viewModel.cards) { card in
@@ -55,26 +58,32 @@ struct ContentView: View {
                             }
                     }
                 }
-           // }
-            .foregroundColor(.orange)
-                            }
-                            /*
-            Spacer()
-            HStack(alignment: .top) {
-                Spacer()
-                //foodButton
-                Spacer()
-                //animalButton
-                Spacer()
-                //peopleName
-                Spacer()
             }
-            .font(.largeTitle)
-            .padding(.horizontal)
-            .foregroundColor(.blue)
-            
-        }*/
+            .foregroundColor(.orange)
+        Spacer()
+        HStack(alignment: .top) {
+            Button {
+                viewModel.newGame()
+            } label: {
+                VStack(alignment: .center) {
+                    Image(systemName: "gamecontroller.fill")
+                    Text ("New Game")
+                        .font(.caption)
+                }
+            }
+            //Spacer()
+            //foodButton
+            //Spacer()
+            //animalButton
+            //Spacer()
+            //peopleName
+            //Spacer()
+        }
+        .font(.largeTitle)
         .padding(.horizontal)
+        .foregroundColor(.blue)
+        Spacer()
+        }.padding(.horizontal)
     }
     /*var foodButton: some View {
         Button {
@@ -115,7 +124,7 @@ struct ContentView: View {
 }
 
 struct CardView: View {
-    let card: MemoryGame<String>.Card
+    let card: MatchGame<String>.Card
     
     var body: some View {
         ZStack {
@@ -134,10 +143,13 @@ struct CardView: View {
     }
 }
 
-
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        let game = EmojiMemoryGame()
+        let game = SymbolMatchGame(with: Theme<String>(
+            themeName: "People",
+            contentSet: ["😃", "🥹", "🤣", "😂", "😜", "🥸","😎", "🤩"],
+            numberOfPairsOfCardsToShow: Int.random(in: 4...8),
+            themeColor: "Yellow"))
         ContentView(viewModel: game)
             .preferredColorScheme(.light)
             .previewInterfaceOrientation(.portraitUpsideDown)
