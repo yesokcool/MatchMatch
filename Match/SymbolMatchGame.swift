@@ -18,7 +18,6 @@ class SymbolMatchGame: ObservableObject {
         [Theme<String>(
             themeName: "People",
             contentSet: ["😃", "🥹", "🤣", "😂", "😜", "🥸","😎", "🤩"],
-            numberOfPairsOfCardsToShow: Int.random(in: 4...8),
             themeColor: "Yellow"),
          Theme<String>(
              themeName: "Animals",
@@ -66,14 +65,14 @@ class SymbolMatchGame: ObservableObject {
     }
     
     var cards: Array<MatchGame<String>.Card> {
-        return model.cards
+        model.cards
     }
     
     func getThemeName() -> String {
-        return theme.themeName
+        theme.themeName
     }
     
-    func getThemeColor() -> Color {
+    func getThemeColor() -> Color? {
         switch theme.themeColor {
         case "Blue":
             return .blue
@@ -81,13 +80,23 @@ class SymbolMatchGame: ObservableObject {
             return .green
         case "Yellow":
             return .yellow
+        case "BlueOrange":
+            return nil
         default:
             return .blue
         }
     }
     
+    func getNumberOfGuesses() -> Int {
+        model.numberOfGuesses
+    }
+    
     func getScore() -> Int {
-        return model.score
+        model.score
+    }
+    
+    func getScoreModifier() -> Int {
+        model.getScoreModifier()
     }
     
     // MARK: - Intent(s)

@@ -8,50 +8,21 @@ import SwiftUI
 struct ContentView: View {
     @ObservedObject var viewModel: SymbolMatchGame
     
-    // Returns the theme ID (1, 2, 3) to the given theme's emoji array.
-    // If the given theme ID is invalid, the theme defaults to Food.
-    /*func getTheme(_ theme: Int) -> [String] {
-        var emojis: [String]
-        switch theme {
-        case 1:
-            emojis = foodEmojis
-        case 2:
-            emojis = peopleEmojis
-        case 3:
-            emojis = animalEmojis
-        default:
-            emojis = foodEmojis
-        }
-        return emojis
-    }*/
-    
-    /*func gridSize(cardCount: Int) -> CGFloat {
-        if (emojiCount < 5) {
-            return CGFloat(300/emojiCount)
-        }
-        else if (emojiCount > 16) {
-            return CGFloat(1000/emojiCount)
-        }
-        return CGFloat(65)
-    }*/
-    
     var body: some View {
         VStack {
             ScrollView {
-                /*Text("Memorize!")
-                    .font(.title)
-                    .fontWeight(.light)*/
                 Text(viewModel.getThemeName())
                     .font(.largeTitle)
                     .fontWeight(.bold)
                     .foregroundColor(viewModel.getThemeColor())
+                HStack {
                 Text("Score: \(viewModel.getScore())")
-                //LazyVGrid that makes the cards as big as possible without having to scroll.
-                //LazyVGrid(columns: [GridItem(.adaptive(minimum: gridSize(cardCount: emojiCount)))]) {
+                Text("Guesses: \(viewModel.getNumberOfGuesses())")
+                    Text("Modifier: \(viewModel.getScoreModifier())")
+                }
                 LazyVGrid(columns: [GridItem(.adaptive(minimum: 65))]) {
-                    //ForEach(getTheme(viewModel.cards) { card in
                     ForEach(viewModel.cards) { card in
-                        CardView(card: card)
+                        CardView(card: card, cardTheme: viewModel.getThemeColor())
                             .aspectRatio(2/3, contentMode: .fit)
                             .onTapGesture {
                                 viewModel.choose(card)
@@ -59,7 +30,7 @@ struct ContentView: View {
                     }
                 }
             }
-            .foregroundColor(.orange)
+            .foregroundColor(viewModel.getThemeColor())
         Spacer()
         HStack(alignment: .top) {
             Button {
@@ -71,13 +42,6 @@ struct ContentView: View {
                         .font(.caption)
                 }
             }
-            //Spacer()
-            //foodButton
-            //Spacer()
-            //animalButton
-            //Spacer()
-            //peopleName
-            //Spacer()
         }
         .font(.largeTitle)
         .padding(.horizontal)
@@ -85,46 +49,11 @@ struct ContentView: View {
         Spacer()
         }.padding(.horizontal)
     }
-    /*var foodButton: some View {
-        Button {
-            emojiCount = Int.random(in: 4...8)
-            theme = 1
-        } label: {
-            VStack(alignment: .center) {
-                Image(systemName: "fork.knife.circle.fill")
-                Text ("Food")
-                    .font(.caption)
-            }
-        }
-    }
-    var peopleName: some View {
-        Button {
-            emojiCount = Int.random(in: 4...8)
-            theme = 2
-        } label: {
-            VStack(alignment: .center) {
-                Image(systemName: "figure.walk.circle.fill")
-                Text ("People")
-                    .font(.caption)
-            }
-        }
-    }
-    var animalButton: some View {
-        Button {
-            emojiCount = Int.random(in: 4...8)
-            theme = 3
-        } label: {
-            VStack(alignment: .center) {
-                Image(systemName: "pawprint.circle.fill")
-                Text ("Animal")
-                    .font(.caption)
-            }
-        }
-    }*/
 }
 
 struct CardView: View {
     let card: MatchGame<String>.Card
+    let cardTheme: Color?
     
     var body: some View {
         ZStack {
@@ -137,7 +66,13 @@ struct CardView: View {
                 shape.opacity(0)
             }
             else {
-                shape.fill()
+                if let theme = cardTheme {
+                    shape.fill(theme)
+                } else {
+                    shape.fill(LinearGradient(gradient: Gradient(colors: [.blue, .orange]),
+                                              startPoint: .top,
+                                              endPoint: .bottom))
+                }
             }
         }
     }

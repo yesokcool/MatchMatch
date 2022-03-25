@@ -8,7 +8,9 @@ import Foundation
 struct MatchGame<CardContent> where CardContent: Equatable {
     private(set) var cards: Array<Card>
     private(set) var score: Int
-    
+    private var prevDate = Date()
+    private(set) var numberOfGuesses = 0
+    private(set) var scoreModifier = 1
     private var indexOfTheOneAndOnlyFaceUpCard: Int?
     
     mutating func choose(_ card: Card) {
@@ -20,34 +22,50 @@ struct MatchGame<CardContent> where CardContent: Equatable {
                 {
                     cards[chosenIndex].isMatched = true
                     cards[potentialMatchIndex].isMatched = true
-                    score += 2
+                    score += 2 * calculateScoreModifier()
+                    print("\( Int(prevDate.timeIntervalSinceNow))")
+                    scoreModifier *= 2
                 } else {
                     if (cards[chosenIndex].hasBeenSeen == true) {
-                        score -= 1
+                        scoreModifier = max(scoreModifier / 2, 1)
+                        score -= 1 * calculateScoreModifier()
                     }
                     else {
                         cards[chosenIndex].hasBeenSeen = true
                     }
                     
                     if (cards[potentialMatchIndex].hasBeenSeen == true) {
-                        score -= 1
+                        scoreModifier = max(scoreModifier / 2, 1)
+                        score -= 1 * calculateScoreModifier()
                     }
                     else {
                         cards[potentialMatchIndex].hasBeenSeen = true
                     }
                 }
-
+                numberOfGuesses += 1
                 indexOfTheOneAndOnlyFaceUpCard = nil
             } else {
                 for index in cards.indices {
                     cards[index].isFaceUp = false
                 }
                 indexOfTheOneAndOnlyFaceUpCard = chosenIndex
+                prevDate = Date()
             }
             cards[chosenIndex].isFaceUp.toggle()
         }
-        
-        print("\(cards)")
+        /*
+        print("\(score)")
+        print("\(  max(10 - (-Int(prevDate.timeIntervalSinceNow)), 1)  )")
+        print("\(  max(cards.count - modifierScore, 1)  )")*/
+    }
+    
+    func calculateScoreModifier() -> Int {
+        return (max(10 - (-Int(prevDate.timeIntervalSinceNow)), 1)
+            * max((cards.count * scoreModifier), 1))
+    }
+    
+    func getScoreModifier() -> Int {
+        return scoreModifier
     }
     
     init(numberOfPairsOfCards: Int, createCardContent: (Int) -> CardContent) {
