@@ -6,7 +6,8 @@
 import SwiftUI
 
 class SymbolMatchGame: ObservableObject {
-
+    typealias Card = MatchGame<String>.Card
+    
     @Published private var theme: Theme<String>
     @Published private var model: MatchGame<String>
     @Published private var themes: [Theme<String>]
@@ -32,12 +33,11 @@ class SymbolMatchGame: ObservableObject {
                    "🍆", "🍅", "🥑", "🥦", "🥬", "🥒",
                    "🌶", "🫑", "🌽", "🧄", "🫒", "🧅",
                    "🥔", "🍠", "🥯", "🍞", "🥖", "🥨"],
-             numberOfPairsOfCardsToShow: Int.random(in: 4...8),
+             numberOfPairsOfCardsToShow: 28,
              themeColor: "Green")]
     }
     
-    static func createMemoryGame(with theme: Theme<String>) -> MatchGame<String> {
-        
+    private static func createMemoryGame(with theme: Theme<String>) -> MatchGame<String> {
         let numberOfPairsOfCardsToShow: Int
         if theme.numberOfPairsOfCardsToShow > theme.contentSet.count {
             numberOfPairsOfCardsToShow = theme.contentSet.count
@@ -64,7 +64,7 @@ class SymbolMatchGame: ObservableObject {
             newTheme.contentSet.randomElement()!}
     }
     
-    var cards: Array<MatchGame<String>.Card> {
+    var cards: Array<Card> {
         model.cards
     }
     
@@ -101,7 +101,7 @@ class SymbolMatchGame: ObservableObject {
     
     // MARK: - Intent(s)
     
-    func choose(_ card: MatchGame<String>.Card) {
+    func choose(_ card: Card) {
         model.choose(card)
     }
 }

@@ -11,21 +11,26 @@ struct MatchGame<CardContent> where CardContent: Equatable {
     private var prevDate = Date()
     private(set) var numberOfGuesses = 0
     private(set) var scoreModifier = 1
-    private var indexOfTheOneAndOnlyFaceUpCard: Int?
+    
+    private var indexOfTheOneAndOnlyFaceUpCard: Int? {
+        get { cards.indices.filter({ cards[$0].isFaceUp }).oneAndOnly }
+        set { cards.indices.forEach { cards[$0].isFaceUp = ($0 == newValue) } }
+    }
+    
     
     mutating func choose(_ card: Card) {
         if let chosenIndex = cards.firstIndex(where: { $0.id == card.id }),
            !cards[chosenIndex].isFaceUp,
            !cards[chosenIndex].isMatched {
             if let potentialMatchIndex = indexOfTheOneAndOnlyFaceUpCard {
-                if cards[chosenIndex].content == cards[potentialMatchIndex].content
-                {
+                if cards[chosenIndex].content == cards[potentialMatchIndex].content {
                     cards[chosenIndex].isMatched = true
                     cards[potentialMatchIndex].isMatched = true
                     score += 2 * calculateScoreModifier()
                     print("\( Int(prevDate.timeIntervalSinceNow))")
                     scoreModifier *= 2
-                } else {
+                }
+                else {
                     if (cards[chosenIndex].hasBeenSeen == true) {
                         scoreModifier = max(scoreModifier / 2, 1)
                         score -= 1 * calculateScoreModifier()
@@ -42,21 +47,14 @@ struct MatchGame<CardContent> where CardContent: Equatable {
                         cards[potentialMatchIndex].hasBeenSeen = true
                     }
                 }
+                cards[chosenIndex].isFaceUp = true
                 numberOfGuesses += 1
-                indexOfTheOneAndOnlyFaceUpCard = nil
-            } else {
-                for index in cards.indices {
-                    cards[index].isFaceUp = false
-                }
+            }
+            else {
                 indexOfTheOneAndOnlyFaceUpCard = chosenIndex
                 prevDate = Date()
             }
-            cards[chosenIndex].isFaceUp.toggle()
         }
-        /*
-        print("\(score)")
-        print("\(  max(10 - (-Int(prevDate.timeIntervalSinceNow)), 1)  )")
-        print("\(  max(cards.count - modifierScore, 1)  )")*/
     }
     
     func calculateScoreModifier() -> Int {
@@ -69,7 +67,7 @@ struct MatchGame<CardContent> where CardContent: Equatable {
     }
     
     init(numberOfPairsOfCards: Int, createCardContent: (Int) -> CardContent) {
-        cards = Array<Card>()
+        cards = []
         // add numberofpairsofcards x 2 to cards array
         for pairIndex in 0..<numberOfPairsOfCards {
             var content = createCardContent(pairIndex)
@@ -84,11 +82,20 @@ struct MatchGame<CardContent> where CardContent: Equatable {
     }
     
     struct Card: Identifiable {
-        var isFaceUp: Bool = false
-        var isMatched: Bool = false
-        var hasBeenSeen: Bool = false
-        var content: CardContent
-        var id: Int
+        var isFaceUp = false
+        var isMatched = false
+        var hasBeenSeen = false
+        let content: CardContent
+        let id: Int
     }
 }
  
+extension Array {
+    var oneAndOnly: Element? {
+        if count == 1 {
+            return first
+        } else {
+            return nil
+        }
+    }
+}

@@ -8,15 +8,19 @@ import SwiftUI
 @main
 struct MatchApp: App {
     // EmojiMemoryGame will change, but `game` is only a pointer that will point to the same thing.
-    let game = SymbolMatchGame(with: Theme<String>(
-        themeName: "People",
-        contentSet: ["😃", "🥹", "🤣", "😂", "😜", "🥸","😎", "🤩"],
-        numberOfPairsOfCardsToShow: Int.random(in: 4...8),
-        themeColor: "Yellow"))
+    private let game = SymbolMatchGame(with: Theme<String>(
+        themeName: "Food",
+        contentSet: ["🍎", "🍊", "🍐", "🍋", "🍓", "🍉",
+              "🥝", "🥐", "🍇", "🍑", "🥕", "🍒",
+              "🍆", "🍅", "🥑", "🥦", "🥬", "🥒",
+              "🌶", "🫑", "🌽", "🧄", "🫒", "🧅",
+              "🥔", "🍠", "🥯", "🍞", "🥖", "🥨"],
+        numberOfPairsOfCardsToShow: 28,
+        themeColor: "Green"))
     
     var body: some Scene {
         WindowGroup {
-            ContentView(viewModel: game)
+            SymbolMatchGameView(game: game)
         }
     }
 }
