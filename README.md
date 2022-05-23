@@ -23,6 +23,3 @@ Topics Covered:
 - Views and modying Views (using .font(), etc.)
 - Text, Button, Spacer
 - Simulators
-- System Images
-- Shape
-- GeometryReader
