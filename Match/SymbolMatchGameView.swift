@@ -66,8 +66,9 @@ struct CardView: View {
             ZStack {
                     Pie(startAngle: Angle(degrees: -90), endAngle: Angle(degrees: 360-90))
                     Text(card.content)
-                        .font(font(in: geometry.size))
                         .rotationEffect(Angle.degrees(card.isMatched ? 360 : 0))
+                        .animation(Animation.linear(duration: 1).repeatForever(autoreverses: false), value: card.isMatched)
+                        .font(font(in: geometry.size))
             }
             .cardify(isFaceUp: card.isFaceUp, isMatched: card.isMatched, theme: theme)
         }
