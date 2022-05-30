@@ -16,7 +16,6 @@ struct Cardify: ViewModifier {
             if isFaceUp {
                 shape.fill().foregroundColor(.white)
                 shape.strokeBorder(lineWidth: DrawingConstants.lineWidth)
-                content
             } else if isMatched {
                 shape.opacity(0)
             }
@@ -29,6 +28,8 @@ struct Cardify: ViewModifier {
                                               endPoint: .bottom))
                 }
             }
+            content
+                .opacity(isFaceUp ? 1 : 0)
         }
     }
     
