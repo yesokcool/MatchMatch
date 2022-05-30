@@ -19,7 +19,6 @@ struct Pie: Shape {
             y: center.y + radius * CGFloat(sin(startAngle.radians))
         )
         
-        
         var p = Path()
         p.move(to: center)
         p.addLine(to: start)

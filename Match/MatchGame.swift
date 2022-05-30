@@ -17,7 +17,6 @@ struct MatchGame<CardContent> where CardContent: Equatable {
         set { cards.indices.forEach { cards[$0].isFaceUp = ($0 == newValue) } }
     }
     
-    
     mutating func choose(_ card: Card) {
         if let chosenIndex = cards.firstIndex(where: { $0.id == card.id }),
            !cards[chosenIndex].isFaceUp,

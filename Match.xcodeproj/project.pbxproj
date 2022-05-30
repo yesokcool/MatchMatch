@@ -16,6 +16,7 @@
 		95241CCF27F247CB009A72AB /* AspectVGrid.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95241CCE27F247CB009A72AB /* AspectVGrid.swift */; };
 		95241CD127F3700D009A72AB /* Pie.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95241CD027F3700D009A72AB /* Pie.swift */; };
 		95AAF5F827ED05100088967B /* GameTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95AAF5F727ED05100088967B /* GameTheme.swift */; };
+		95CC7CB62841471C00F3CDAA /* Cardify.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95CC7CB52841471C00F3CDAA /* Cardify.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -29,6 +30,7 @@
 		95241CCE27F247CB009A72AB /* AspectVGrid.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AspectVGrid.swift; sourceTree = "<group>"; };
 		95241CD027F3700D009A72AB /* Pie.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pie.swift; sourceTree = "<group>"; };
 		95AAF5F727ED05100088967B /* GameTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameTheme.swift; sourceTree = "<group>"; };
+		95CC7CB52841471C00F3CDAA /* Cardify.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cardify.swift; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -61,6 +63,7 @@
 		950BBA4727DA8D99009C6C31 /* Match */ = {
 			isa = PBXGroup;
 			children = (
+				95CC7CB52841471C00F3CDAA /* Cardify.swift */,
 				95241CD027F3700D009A72AB /* Pie.swift */,
 				950BBA4827DA8D99009C6C31 /* MatchApp.swift */,
 				950A37E227EA925C00BD90CA /* MatchGame.swift */,
@@ -154,6 +157,7 @@
 			files = (
 				950A37E327EA925C00BD90CA /* MatchGame.swift in Sources */,
 				950BBA4B27DA8D99009C6C31 /* SymbolMatchGameView.swift in Sources */,
+				95CC7CB62841471C00F3CDAA /* Cardify.swift in Sources */,
 				95241CD127F3700D009A72AB /* Pie.swift in Sources */,
 				95241CCF27F247CB009A72AB /* AspectVGrid.swift in Sources */,
 				95AAF5F827ED05100088967B /* GameTheme.swift in Sources */,
