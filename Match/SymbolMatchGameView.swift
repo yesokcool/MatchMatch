@@ -166,7 +166,7 @@ struct CardView: View {
                         Pie(startAngle: Angle(degrees: -90), endAngle: Angle(degrees: (1-animatedBonusRemaining)*360-90))
                             .onAppear {
                                 animatedBonusRemaining = card.bonusRemaining
-                                withAnimation(.linear(duration: card.bonusRemaining)) {
+                                withAnimation(.linear(duration: card.bonusTimeRemaining)) {
                                     animatedBonusRemaining = 0
                                 }
                             }
