@@ -11,15 +11,16 @@ struct SymbolMatchGameView: View {
     @Namespace private var dealingNamespace
     
     var body: some View {
-        VStack {
-            
-            gameTitle
-            gameBody
+        ZStack(alignment: .bottom) {
+            VStack {
+                gameTitle
+                gameBody
+                gameControls
+                    .padding()
+                
+                Spacer()
+            }
             deckBody
-            shuffle
-            gameControls
-            
-            Spacer()
         }
     }
     
@@ -55,7 +56,10 @@ struct SymbolMatchGameView: View {
     var gameControls: some View {
         HStack(alignment: .top) {
             Button {
-                game.newGame()
+                withAnimation {
+                    dealt = []
+                    game.newGame()
+                }
             } label: {
                 VStack(alignment: .center) {
                     Image(systemName: "gamecontroller.fill")
@@ -63,6 +67,8 @@ struct SymbolMatchGameView: View {
                         .font(.caption)
                 }
             }
+            Spacer()
+            shuffle
         }
         .font(.largeTitle)
         .padding(.horizontal)
@@ -119,13 +125,18 @@ struct SymbolMatchGameView: View {
                 }
             }
         }
-        .padding(.horizontal)
     }
     
     var shuffle: some View {
-        Button("Shuffle") {
-            withAnimation(.easeInOut(duration:5)) {
+        Button() {
+            withAnimation() {
                 game.shuffle()
+            }
+        } label: {
+            VStack(alignment: .center) {
+                Image(systemName: "rectangle.2.swap")
+                Text ("Shuffle")
+                    .font(.caption)
             }
         }
     }
@@ -145,15 +156,33 @@ struct CardView: View {
     let card: SymbolMatchGame.Card
     let theme: Color?
     
+    @State private var animatedBonusRemaining: Double = 0
+    
     var body: some View {
         GeometryReader { geometry in
             ZStack {
-                    Pie(startAngle: Angle(degrees: -90), endAngle: Angle(degrees: 360-90))
-                    Text(card.content)
-                        .rotationEffect(Angle.degrees(card.isMatched ? 360 : 0))
-                        .animation(Animation.linear(duration: 1).repeatForever(autoreverses: false), value: card.isMatched)
-                        .font(Font.system(size:DrawingConstants.fontSize))
-                        .scaleEffect(scale(thatFits: geometry.size))
+                Group {
+                    if card.isConsumingBonusTime {
+                        Pie(startAngle: Angle(degrees: -90), endAngle: Angle(degrees: (1-animatedBonusRemaining)*360-90))
+                            .onAppear {
+                                animatedBonusRemaining = card.bonusRemaining
+                                withAnimation(.linear(duration: card.bonusRemaining)) {
+                                    animatedBonusRemaining = 0
+                                }
+                            }
+                    }
+                    else {
+                        Pie(startAngle: Angle(degrees: -90), endAngle: Angle(degrees: (1-card.bonusRemaining)*360-90))
+                    }
+                }
+                .padding(5)
+                .opacity(0.5)
+                
+                Text(card.content)
+                    .rotationEffect(Angle.degrees(card.isMatched ? 360 : 0))
+                    .animation(Animation.linear(duration: 1).repeatForever(autoreverses: false), value: card.isMatched)
+                    .font(Font.system(size:DrawingConstants.fontSize))
+                    .scaleEffect(scale(thatFits: geometry.size))
             }
             .cardify(isFaceUp: card.isFaceUp, isMatched: card.isMatched, theme: theme)
         }
