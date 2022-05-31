@@ -65,6 +65,10 @@ struct MatchGame<CardContent> where CardContent: Equatable {
         return scoreModifier
     }
     
+    mutating func shuffle() {
+        cards.shuffle()
+    }
+    
     init(numberOfPairsOfCards: Int, createCardContent: (Int) -> CardContent) {
         cards = []
         // add numberofpairsofcards x 2 to cards array
@@ -76,7 +80,7 @@ struct MatchGame<CardContent> where CardContent: Equatable {
             cards.append(Card(content: content, id: pairIndex*2))
             cards.append(Card(content: content, id: pairIndex*2+1))
         }
-        cards = cards.shuffled()
+        cards.shuffle()
         score = 0
     }
     

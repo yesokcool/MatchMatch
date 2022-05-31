@@ -25,16 +25,8 @@ struct SymbolMatchGameView: View {
                 .font(.subheadline)
             }
             
-            AspectVGrid(items: game.cards, aspectRatio: 2/3) { card in
-                if card.isMatched && !card.isFaceUp {
-                    Rectangle().opacity(0)
-                }
-                else {
-                    CardView(card: card, theme: game.getThemeColor())
-                        .padding(4)
-                        .onTapGesture { game.choose(card) }
-                }
-            }.padding(.horizontal)
+            gameBody
+            shuffle
             
             HStack(alignment: .top) {
                 Button {
@@ -54,7 +46,34 @@ struct SymbolMatchGameView: View {
             Spacer()
         }
         .foregroundColor(game.getThemeColor())
-    } 
+        .padding()
+    }
+        
+    var gameBody: some View {
+        AspectVGrid(items: game.cards, aspectRatio: 2/3) { card in
+            if card.isMatched && !card.isFaceUp {
+                Color.clear
+            }
+            else {
+                CardView(card: card, theme: game.getThemeColor())
+                    .padding(4)
+                    .onTapGesture {
+                        withAnimation(.easeInOut(duration: 0.5)) {
+                            game.choose(card)
+                        }
+                    }
+            }
+        }
+        .padding(.horizontal)
+    }
+    
+    var shuffle: some View {
+        Button("Shuffle") {
+            withAnimation(.easeInOut(duration:5)) {
+                game.shuffle()
+            }
+        }
+    }
 }
 
 struct CardView: View {

@@ -99,6 +99,10 @@ class SymbolMatchGame: ObservableObject {
         model.getScoreModifier()
     }
     
+    func shuffle() {
+        model.shuffle()
+    }
+    
     // MARK: - Intent(s)
     
     func choose(_ card: Card) {
